@@ -16,6 +16,12 @@ public class Cell {
         this.y = y;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        Cell c = (Cell)obj;
+        return x == c.x && y == c.y;
+    }
+
     public void  setAlive() {
         this.isAlive = true;
     }

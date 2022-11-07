@@ -41,7 +41,7 @@ public class Grid {
         int count = 0;
         for (int i = c.x -1; i <= c.x+1; i++) {
             for (int j = c.y -1; j <= c.y+1; j++) {
-                if (isInside(i, j) && !(c.x==i && c.y==j)){
+                if (isInside(i, j) && c != this.cells[i][j]){
                     if (this.cells[i][j].isAlive) count ++;
                 }
             }
