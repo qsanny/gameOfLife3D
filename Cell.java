@@ -1,25 +1,29 @@
-public class Cell {
+import java.io.Serializable;
+
+public class Cell implements Serializable {
 
     public boolean isAlive;
-    public int x, y = 0;
+    public int x, y, z = 0;
 
 
-    public Cell(int x, int y){
+    public Cell(int x, int y, int z){
         this.isAlive = false;
         this.x = x;
         this.y = y;
+        this.z = z;
     }
 
-    public Cell(int x, int y, boolean isAlive){
+    public Cell(int x, int y, int z, boolean isAlive){
         this.isAlive = isAlive;
         this.x = x;
         this.y = y;
+        this.z = z;
     }
 
     @Override
     public boolean equals(Object obj) {
         Cell c = (Cell)obj;
-        return x == c.x && y == c.y;
+        return x == c.x && y == c.y && z == c.z;
     }
 
     public void  setAlive() {
@@ -30,8 +34,13 @@ public class Cell {
         this.isAlive = false;
     }
 
+    public void  setStatus(boolean status) {
+        this.isAlive = status;
+    }
+
     public String toString() {
-        return this.isAlive ? "X":" ";
+        String str = String.format("(%d, %d, %d, %b)", x, y, z, isAlive);
+        return str;
     }
     
     

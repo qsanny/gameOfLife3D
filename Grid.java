@@ -1,28 +1,44 @@
+import java.io.Serializable;
 import java.util.Vector;
 
-public class Grid {
-    private int row = 10, col = 10;
-    private Cell[][] cells;
+public class Grid implements Serializable {
+    private int rows = 10, cols = 10, depth = 10;
+    private Cell[][][] cells;
 
     public Grid() {
         this.initGrid(new Vector<Cell>());
     }
     
-    public Grid(int nr, int nc, Vector<Cell> initCells) {
-        this.row = nr;
-        this.col = nc;
+    public Grid(int nr, int nc, int nd, Vector<Cell> initCells) {
+        this.rows = nr;
+        this.cols = nc;
+        this.depth = nd;
         this.initGrid(initCells);
     }
 
-    public void initGrid(Vector<Cell> initCells){
-        this.cells = new Cell[this.row][this.col];
+    public int getRows() {
+        return rows;
+    }
 
-        for (int i = 0; i < this.row; i++) {
-            for (int j = 0; j< this.col; j++){
-                this.cells[i][j] = new Cell(i, j);
-                for (int c = 0; c < initCells.size(); c++) {
-                    if (initCells.get(c).x == i && initCells.get(c).y == j){
-                        this.cells[i][j] = initCells.get(c);
+    public int getCols() {
+        return cols;
+    }
+
+    public int getDepth() {
+        return depth;
+    }
+
+    public void initGrid(Vector<Cell> initCells){
+        this.cells = new Cell[this.rows][this.cols][this.depth];
+
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j< this.cols; j++){
+                for (int k = 0; k< this.depth; k++){
+                    this.cells[i][j][k] = new Cell(i, j, k);
+                    for (int c = 0; c < initCells.size(); c++) {
+                        if (initCells.get(c) == this.cells[i][j][k]){
+                            this.cells[i][j][k] = initCells.get(c);
+                        }
                     }
                 }
             }
@@ -30,19 +46,21 @@ public class Grid {
 
     }
 
-    public boolean isInside(int x, int y){
-        if (x <0 || x >= this.col || y < 0 || y >= this.row){
+    public boolean isInside(int x, int y, int z){
+        if (x <0 || x >= this.cols || y < 0 || y >= this.rows ||  z< 0 || z >= this.depth){
             return false;
         }
         return true;
     }
 
-    private int getCellNeighbourCount(Cell c){
+    public int getCellNeighbourCount(Cell c){
         int count = 0;
         for (int i = c.x -1; i <= c.x+1; i++) {
             for (int j = c.y -1; j <= c.y+1; j++) {
-                if (isInside(i, j) && c != this.cells[i][j]){
-                    if (this.cells[i][j].isAlive) count ++;
+                for (int k = c.z -1; k <= c.z+1; k++) {
+                    if (isInside(i, j, k) && c != this.cells[i][j][k]){
+                        if (this.cells[i][j][k].isAlive) count ++;
+                    }
                 }
             }
         }
@@ -59,7 +77,7 @@ public class Grid {
         return getCellNeighbourCount(c) == 3;
     }
 
-    private boolean getNextCellState(Cell c){
+    public boolean getNextCellState(Cell c){
         if (c.isAlive) return willSurvive(c);
         else return willBorn(c);
     }
@@ -68,24 +86,37 @@ public class Grid {
 
         Vector<Cell> newCells = new Vector<Cell>();
 
-        for (int i = 0; i < this.row; i++) {
-            for (int j = 0; j < this.col; j++) {
-                Cell c = this.cells[i][j];
-                newCells.add(new Cell(i, j, getNextCellState(c)));
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < this.cols; j++) {
+                for (int k = 0; k< this.depth; j++){
+                    Cell c = this.cells[i][j][k];
+                    newCells.add(new Cell(i, j, k, getNextCellState(c)));
+                }
             }
         }
 
         for (int c = 0; c < newCells.size(); c++) {
-            this.cells[newCells.get(c).x][newCells.get(c).y].isAlive = newCells.get(c).isAlive;
+            this.cells[newCells.get(c).x][newCells.get(c).y][newCells.get(c).z].setStatus(newCells.get(c).isAlive);
         }
     }
 
+    public void updateNewCells(Vector<Cell> newCells) {
+        for (int c = 0; c < newCells.size(); c++) {
+            this.cells[newCells.get(c).x][newCells.get(c).y][newCells.get(c).z].setStatus(newCells.get(c).isAlive);
+        }
+    }
+
+    public Cell get(int x, int y, int z){
+        return cells[x][y][z];
+    }
+
     public void print(){
-        for (int i = 0; i < this.row; i++) {
-            for (int j = 0; j< this.col; j++){
-                System.out.printf("%s", this.cells[i][j]);
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j< this.cols; j++){
+                for (int k = 0; k< this.depth; k++){
+                    System.out.printf("%s\n", get(i, j, k));
+                }
             }
-            System.out.println();
         }
     }
 }
