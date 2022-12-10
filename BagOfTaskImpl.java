@@ -7,6 +7,7 @@ public class BagOfTaskImpl extends UnicastRemoteObject implements BagOfTask {
     Grid grid;
 
     int currentI = 0,currentJ = 0, currentK = 0;
+    boolean endOfGen = false;
 
     Vector<Cell> newGenCells = new Vector<Cell>();
 
@@ -24,16 +25,26 @@ public class BagOfTaskImpl extends UnicastRemoteObject implements BagOfTask {
         System.out.println("Welcome to game of life 3D");
 
         this.grid = g;
+
+        g.print();
+
         
     }
 
     public BagOfTaskImpl(Grid grid) throws RemoteException{
         this.grid = grid;
+
+        grid.print();
+
     }  
     
     public Task getTask() throws RemoteException {
+
+        if(endOfGen) {
+            return null;
+        }
         
-        System.out.printf("%d, %d, %d \n", currentI, currentJ, currentK);
+        // System.out.printf("%d, %d, %d \n", currentI, currentJ, currentK);
         Cell currentCell = this.grid.get(currentI, currentJ, currentK);
         Task t = new TaskImpl(currentCell, this.grid);
 
@@ -49,7 +60,9 @@ public class BagOfTaskImpl extends UnicastRemoteObject implements BagOfTask {
                 if (currentK == this.grid.getDepth() ){
                     currentK = 0;
                     // this board is complete
-                    return null;
+                    endOfGen = true;
+
+                    System.out.println("END OF GEN" + endOfGen);
                 }
             }
         }
@@ -60,11 +73,14 @@ public class BagOfTaskImpl extends UnicastRemoteObject implements BagOfTask {
         TaskImpl t = (TaskImpl)task;
         Cell newCell = new Cell(t.c.x, t.c.y, t.c.z, t.nextState);
         this.newGenCells.add(newCell);
+        // System.out.printf("got result %s \n", newGenCells.size());
 
-        if (newGenCells.size() == grid.getCols() * grid.getDepth() * grid.getRows()){
+
+        if (newGenCells.size() == grid.getCols() * grid.getRows() * grid.getDepth() ){
             grid.updateNewCells(newGenCells);
             System.out.println("One gen done");
             grid.print();
+            endOfGen = true;
         }
     }
     

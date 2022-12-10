@@ -35,14 +35,19 @@ public class Grid implements Serializable {
             for (int j = 0; j< this.cols; j++){
                 for (int k = 0; k< this.depth; k++){
                     this.cells[i][j][k] = new Cell(i, j, k);
-                    for (int c = 0; c < initCells.size(); c++) {
-                        if (initCells.get(c) == this.cells[i][j][k]){
-                            this.cells[i][j][k] = initCells.get(c);
-                        }
-                    }
                 }
             }
         }
+
+        initCells.forEach((c) ->{
+            this.cells[c.x][c.y][c.z].setStatus(c.isAlive);
+        } );
+
+        // for (int c = 0; c < initCells.size(); c++) {
+        //     if (initCells.get(c) == this.cells[i][j][k]){
+        //         this.cells[i][j][k] = initCells.get(c);
+        //     }
+        // }
 
     }
 
@@ -53,15 +58,27 @@ public class Grid implements Serializable {
         return true;
     }
 
-    public int getCellNeighbourCount(Cell c){
-        int count = 0;
+    public Vector<Cell> getCellNeighbour(Cell c){
+        Vector<Cell> n = new Vector<Cell>();
         for (int i = c.x -1; i <= c.x+1; i++) {
             for (int j = c.y -1; j <= c.y+1; j++) {
                 for (int k = c.z -1; k <= c.z+1; k++) {
                     if (isInside(i, j, k) && c != this.cells[i][j][k]){
-                        if (this.cells[i][j][k].isAlive) count ++;
+                        n.add(this.cells[i][j][k]);
                     }
                 }
+            }
+        }
+        return n;
+    }
+
+    public int getCellNeighbourCount(Cell c){
+        Vector<Cell> n = getCellNeighbour(c);
+
+        int count =0;
+        for (Cell cell : n) {
+            if (cell.isAlive){
+                count++;
             }
         }
 
@@ -74,7 +91,7 @@ public class Grid implements Serializable {
     }
 
     private boolean willBorn(Cell c){
-        return getCellNeighbourCount(c) == 3;
+        return getCellNeighbourCount(c) == 3 || getCellNeighbourCount(c) == 4;
     }
 
     public boolean getNextCellState(Cell c){
@@ -111,10 +128,14 @@ public class Grid implements Serializable {
     }
 
     public void print(){
+        System.out.println("Print : ");
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j< this.cols; j++){
                 for (int k = 0; k< this.depth; k++){
-                    System.out.printf("%s\n", get(i, j, k));
+                    Cell c = get(i, j, k);
+                    if (c.isAlive){
+                        System.out.printf("%s\n", c);
+                    }
                 }
             }
         }

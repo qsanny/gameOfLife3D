@@ -9,6 +9,8 @@ public class Client {
             while (t != null){
                 t.execute();
                 bot.sendResult(t);
+                t = bot.getTask();
+
             }
         }
             catch (Exception e){

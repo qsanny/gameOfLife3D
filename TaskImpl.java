@@ -1,3 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class TaskImpl implements Task{
 
     Cell c;
@@ -12,8 +16,27 @@ public class TaskImpl implements Task{
 
     @Override
     public void execute() {
-        // compute the next state of the cell
+        
         nextState = g.getNextCellState(c);
+
+        BufferedWriter writer;
+        try {
+            writer = new BufferedWriter(new FileWriter("debug.log", true));
+
+
+        writer.append(String.format("%s: [%d] -> %s \n", c, g.getCellNeighbourCount(c),   g.getNextCellState(c)));
+        for (Cell cell : g.getCellNeighbour(c)) {
+            writer.append(String.format("\t\t%s \n", cell));
+        }
+
+        System.out.printf("%s -> %s \n", c,  nextState);
+
+        writer.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
     
 }
