@@ -6,12 +6,16 @@ public class Client {
         try{
             BagOfTask bot=(BagOfTask) Naming.lookup("mybagoftask");
             Task t = bot.getTask();
-            while (t != null){
-                t.execute();
-                bot.sendResult(t);
-                t = bot.getTask();
 
+            while(!bot.isCompleted()){
+                while (t != null){
+                    t.execute();
+                    bot.sendResult(t);
+                    t = bot.getTask();
+                }
             }
+
+            System.out.println("BOT IS DONE");
         }
             catch (Exception e){
             System.err.println("Erreur :"+e);

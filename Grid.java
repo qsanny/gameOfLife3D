@@ -128,7 +128,7 @@ public class Grid implements Serializable {
     }
 
     public void print(){
-        System.out.println("Print : ");
+        System.out.println("The grid : ");
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j< this.cols; j++){
                 for (int k = 0; k< this.depth; k++){

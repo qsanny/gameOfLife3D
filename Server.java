@@ -7,7 +7,7 @@ public class Server {
     try{
         Registry registry = LocateRegistry.createRegistry (1099);
 
-
+        int MAX_GEN = 2;
         Vector<Cell> cells = new Vector<Cell>();
         cells.add(new Cell(5, 5, 5, true));
         cells.add(new Cell(4, 5, 5, true));
@@ -21,7 +21,7 @@ public class Server {
 
         Grid g = new Grid(15, 15, 15, cells);
 
-        BagOfTaskImpl bot = new BagOfTaskImpl(g);
+        BagOfTaskImpl bot = new BagOfTaskImpl(g, MAX_GEN);
         
         
         
