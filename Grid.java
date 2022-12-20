@@ -128,16 +128,22 @@ public class Grid implements Serializable {
     }
 
     public void print(){
-        System.out.println("The grid : ");
+        System.out.println("Liste des cellules vivantes : ");
+        boolean isEmpty = true;
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j< this.cols; j++){
                 for (int k = 0; k< this.depth; k++){
                     Cell c = get(i, j, k);
                     if (c.isAlive){
+                        isEmpty = false;
                         System.out.printf("%s\n", c);
                     }
                 }
             }
+        }
+
+        if(isEmpty){
+            System.out.printf("Aucune cellule vivante\n");
         }
     }
 }

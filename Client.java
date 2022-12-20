@@ -7,7 +7,7 @@ public class Client {
             BagOfTask bot=(BagOfTask) Naming.lookup("mybagoftask");
             Task t = bot.getTask();
 
-            while(!bot.isCompleted()){
+            while(true){
                 while (t != null){
                     t.execute();
                     bot.sendResult(t);
@@ -15,7 +15,7 @@ public class Client {
                 }
             }
 
-            System.out.println("BOT IS DONE");
+            // System.out.println("BOT IS DONE");
         }
             catch (Exception e){
             System.err.println("Erreur :"+e);

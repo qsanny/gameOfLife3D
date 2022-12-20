@@ -20,6 +20,7 @@ public class TaskImpl implements Task{
         nextState = g.getNextCellState(c);
 
         // BufferedWriter writer;
+        System.out.printf("%s -> %s \n", c,  nextState);
 
     }
     

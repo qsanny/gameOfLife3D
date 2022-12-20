@@ -8,7 +8,7 @@ public class BagOfTaskImpl extends UnicastRemoteObject implements BagOfTask {
 
     int MAX_GEN = 2;
 
-    int currentI = 0,currentJ = 0, currentK = 0, currentGen = 1;
+    int currentI = 0,currentJ = 0, currentK = 0, currentGen = 0;
     boolean endOfGen = false;
 
     Vector<Cell> newGenCells = new Vector<Cell>();
@@ -73,8 +73,8 @@ public class BagOfTaskImpl extends UnicastRemoteObject implements BagOfTask {
                 if (currentK == this.grid.getDepth() ){
                     currentK = 0;
                     // this board is complete
-                    endOfGen = true;
-                    System.out.println("END OF GEN");
+                    // endOfGen = true;
+                    // System.out.println("END OF GEN");
                 }
             }
         }
@@ -90,7 +90,7 @@ public class BagOfTaskImpl extends UnicastRemoteObject implements BagOfTask {
 
         if (newGenCells.size() == grid.getCols() * grid.getRows() * grid.getDepth() ){
             grid.updateNewCells(newGenCells);
-            System.out.printf("gen %d done \n", this.currentGen);
+            System.out.printf("Gen %d terminé \n", this.currentGen);
             grid.print();
             endOfGen = true;
             nextGen();
@@ -102,14 +102,13 @@ public class BagOfTaskImpl extends UnicastRemoteObject implements BagOfTask {
         if (this.isCompleted()) {
             if (this.endTime == -1){
                 this.endTime = System.currentTimeMillis();
-                System.out.printf("\n\n rurring time = %d ms \n\n", (this.endTime - this.startTime) );
+                System.out.printf("\n\n Temps d'exécution = %d ms \n\n", (this.endTime - this.startTime) );
             }
             return;
         };
         this.currentI = 0;
         this.currentJ = 0; 
         this.currentK = 0; 
-        this.currentGen = 1;
         this.newGenCells.removeAllElements();
         currentGen++;
 
