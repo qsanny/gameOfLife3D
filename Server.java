@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Vector;
@@ -78,9 +79,13 @@ public class Server {
         BagOfTaskImpl bot = new BagOfTaskImpl(grid, MAX_GEN);
         
         String nom="mybagoftask";
+
+        String url = "rmi://" + InetAddress.getLocalHost().getHostAddress() + "/"+ nom;
+
+
         registry.bind(nom, bot);
 
-        System.out.println("Serveur enregistré");
+        System.out.println("Enregistrement de l'objet avec l'url : " + url);
     }
         catch (Exception e){System.err.println("Erreur :"+e);}
     }
