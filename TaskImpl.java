@@ -1,7 +1,3 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-
 public class TaskImpl implements Task{
 
     Cell c;
@@ -18,10 +14,7 @@ public class TaskImpl implements Task{
     public void execute() {
         
         nextState = g.getNextCellState(c);
-
-        // BufferedWriter writer;
         System.out.printf("%s -> %s \n", c,  nextState);
-
     }
     
 }

@@ -12,24 +12,19 @@ public class Client {
         if(args.length == 1){
             serveur = args[0];
         }
-
         String url = "rmi://" + serveur + "/"+ nom;
         System.out.println("Obtention de l'objet distant de l'url : " + url);
 
-        
         try{
             BagOfTask bot=(BagOfTask) Naming.lookup(url);
             Task t = bot.getTask();
-
-            while(true){
+            while(!bot.isCompleted()){
                 while (t != null){
                     t.execute();
                     bot.sendResult(t);
                     t = bot.getTask();
                 }
             }
-
-            // System.out.println("BOT IS DONE");
         }
             catch (Exception e){
             System.err.println("Erreur :"+e);

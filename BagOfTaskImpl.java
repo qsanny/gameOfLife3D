@@ -46,7 +46,7 @@ public class BagOfTaskImpl extends UnicastRemoteObject implements BagOfTask {
     public boolean isCompleted() throws RemoteException{
         return this.currentGen == this.MAX_GEN;
     }
-    
+    // Retourne une nouvelle tache
     public Task getTask() throws RemoteException {
 
         if (this.startTime == -1){
@@ -81,12 +81,11 @@ public class BagOfTaskImpl extends UnicastRemoteObject implements BagOfTask {
         return t;
     }
 
+    /// Récupérer le resultat d'une tache et déterminer si la génératione est complete
     public void sendResult(Task task) throws RemoteException {
         TaskImpl t = (TaskImpl)task;
         Cell newCell = new Cell(t.c.x, t.c.y, t.c.z, t.nextState);
         this.newGenCells.add(newCell);
-        // System.out.printf("got result %s \n", newGenCells.size());
-
 
         if (newGenCells.size() == grid.getCols() * grid.getRows() * grid.getDepth() ){
             grid.updateNewCells(newGenCells);
@@ -98,6 +97,7 @@ public class BagOfTaskImpl extends UnicastRemoteObject implements BagOfTask {
         }
     }
 
+    // reinitialiser les données pour la generation suivante si le nombre de generation voulu est n'est pas atteint 
     private void nextGen() throws RemoteException {
         if (this.isCompleted()) {
             if (this.endTime == -1){
